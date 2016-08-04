@@ -1,5 +1,6 @@
 import os
 import requests
+import requests.exceptions
 
 
 class Client(object):
@@ -34,12 +35,22 @@ class Client(object):
     def get(self, endpoint):
         return self._request('get', endpoint)
 
-    def post(self, endpoint):
-        return self._request('post', endpoint)
+    def post(self, endpoint, data=None):
+        return self._request('post', endpoint, data=data)
 
-    def _request(self, method, endpoint):
+    def _request(self, method, endpoint, data=None):
         func = getattr(requests, method)
-        return func(
+        response = func(
             self.endpoint(endpoint),
-            headers={'Authorization': 'Token ' + self.token}
-        ).json()
+            data=data,
+            headers={'Authorization': 'Token ' + self.token},
+        )
+        if response.status_code >= 400:
+            raise HttpError(response.status_code, response.content)
+        return response.json()
+
+
+class HttpError(Exception):
+
+    def __init__(self, status_code, content):
+        super(HttpError, self).__init__("Http error {}: {}".format(status_code, content))

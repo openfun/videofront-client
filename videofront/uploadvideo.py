@@ -26,7 +26,7 @@ def main():
 
 
     # Get upload url
-    upload_url = client.post('videouploads/')
+    upload_url = client.post('videouploads/', data={'filename': os.path.basename(video_path)})
 
     # Upload the file
     method = upload_url['method'].lower()
@@ -36,6 +36,11 @@ def main():
     _upload_response = func(url, data=open(video_path).read())
 
     # Monitor transcoding progress
+    video = client.get('videos/' + video_id)
+    title = video['title']
+    video_id = video['id']
+    print u"Video uploaded: id={} title='{}'".format(video_id, title)
+    message = None
     status = None
     while status is None or status in ['processing', 'pending']:
         sleep(1) # don't flood the server
@@ -43,10 +48,12 @@ def main():
         status_details = video['status_details']
         if status_details:
             status = status_details['status']
-            progress = status_details['progress']
-            print status, "%.2f%%" % progress
+            new_message = "    {} {:.2f}%%".format(status, status_details['progress'])
         else:
-            print "status unknown"
+            new_message = "    status unknown"
+        if message != new_message:
+            message = new_message
+            print message
 
 
 if __name__ == '__main__':
