@@ -16,3 +16,7 @@ The remote host and authentication tokens may be stored in environment variables
 
     export VIDEOFRONT_HOST=http://videofront.myhost.com
     export VIDEOFRONT_TOKEN=myauthenticationtoken
+
+Delete a video:
+
+    videofront-deletevideo myvideoid

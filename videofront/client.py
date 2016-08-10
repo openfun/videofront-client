@@ -1,4 +1,5 @@
 import os
+
 import requests
 import requests.exceptions
 
@@ -38,6 +39,9 @@ class Client(object):
     def post(self, endpoint, data=None):
         return self._request('post', endpoint, data=data)
 
+    def delete(self, endpoint, data=None):
+        return self._request('delete', endpoint, data=data)
+
     def _request(self, method, endpoint, data=None):
         func = getattr(requests, method)
         response = func(
@@ -47,7 +51,7 @@ class Client(object):
         )
         if response.status_code >= 400:
             raise HttpError(response.status_code, response.content)
-        return response.json()
+        return response
 
 
 class HttpError(Exception):

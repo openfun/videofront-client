@@ -17,6 +17,7 @@ setup(
     url="https://github.com/openfun/videofront-client",
     install_requires=[
         "requests",
+        "requests[security]",
     ],
     license='AGPL',
     author="FUN-MOOC",
@@ -25,6 +26,7 @@ setup(
     entry_points={
         'console_scripts': [
             'videofront-uploadvideo=videofront.uploadvideo:main',
+            'videofront-deletevideos=videofront.deletevideos:main',
         ],
     },
     classifiers=[
