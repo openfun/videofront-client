@@ -17,12 +17,12 @@ class Client(object):
                     "running the 'createuser' management command.\n"
                     "The token can also be set as the VIDEOFRONT_TOKEN environment variable."
                 )
-            self.token = self.get_token(username, password)
+            self.token = self._get_token(username, password)
 
     def endpoint(self, name):
         return self.host + '/api/v1/' + name
 
-    def get_token(self, username, password):
+    def _get_token(self, username, password):
         response = requests.post(
             self.endpoint('auth-token/'),
             data={
@@ -33,8 +33,8 @@ class Client(object):
         response_data = response.json()
         return response_data['token']
 
-    def get(self, endpoint):
-        return self._request('get', endpoint)
+    def get(self, endpoint, params=None):
+        return self._request('get', endpoint, params=params)
 
     def post(self, endpoint, data=None):
         return self._request('post', endpoint, data=data)
@@ -42,13 +42,12 @@ class Client(object):
     def delete(self, endpoint, data=None):
         return self._request('delete', endpoint, data=data)
 
-    def _request(self, method, endpoint, data=None):
+    def _request(self, method, endpoint, **kwargs):
         func = getattr(requests, method)
-        response = func(
-            self.endpoint(endpoint),
-            data=data,
-            headers={'Authorization': 'Token ' + self.token},
-        )
+        if 'headers' not in kwargs:
+            kwargs['headers'] = {}
+        kwargs['headers']['Authorization'] = 'Token ' + self.token
+        response = func(self.endpoint(endpoint), **kwargs)
         if response.status_code >= 400:
             raise HttpError(response.status_code, response.content)
         return response
@@ -57,4 +56,4 @@ class Client(object):
 class HttpError(Exception):
 
     def __init__(self, status_code, content):
-        super(HttpError, self).__init__("Http error {}: {}".format(status_code, content))
+        super(HttpError, self).__init__("HTTP error {}: {}".format(status_code, content))

@@ -9,13 +9,19 @@ from . import cli
 
 def main():
     parser = argparse.ArgumentParser(description='Upload a video file')
+    parser.add_argument('--playlist', help='Playlist ID to which the video should be added')
     parser.add_argument('video', help='Path to video file')
     cli.add_auth_arguments(parser)
     args, client = cli.parse_args(parser)
     video_path = args.video
 
     # Get upload url
-    upload_url = client.post('videouploads/', data={'filename': os.path.basename(video_path)}).json()
+    data = {
+        'filename': os.path.basename(video_path)
+    }
+    if args.playlist:
+        data['playlist_id'] = args.playlist
+    upload_url = client.post('videouploads/', data=data).json()
 
     # Upload the file
     method = upload_url['method'].lower()

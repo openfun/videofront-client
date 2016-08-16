@@ -24,8 +24,14 @@ setup(
     packages=['videofront'],
     entry_points={
         'console_scripts': [
-            'videofront-uploadvideo=videofront.uploadvideo:main',
-            'videofront-deletevideos=videofront.deletevideos:main',
+            'videofront-getauthtoken=videofront.cli:get_auth_token',
+
+            'videofront-searchplaylists=videofront.cli:search_playlists',
+            'videofront-createplaylists=videofront.cli:create_playlist',
+            'videofront-deleteplaylists=videofront.cli:delete_playlists',
+
+            'videofront-uploadvideo=videofront.cli:upload_video',
+            'videofront-deletevideos=videofront.cli:delete_videos',
         ],
     },
     classifiers=[
