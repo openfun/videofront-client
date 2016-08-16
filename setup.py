@@ -16,7 +16,7 @@ setup(
     long_description=(read('README.md')),
     url="https://github.com/openfun/videofront-client",
     install_requires=[
-        "requests",
+        "requests[security]",
     ],
     license='AGPL',
     author="FUN-MOOC",
