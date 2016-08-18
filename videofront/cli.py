@@ -84,7 +84,7 @@ def search_playlists():
     playlists = response.json()
     print("{} results found".format(len(playlists)))
     for playlist in playlists:
-        print(playlist)
+        print("    id={} name='{}'".format(playlist['id'], playlist['name']))
 
 def create_playlist():
     parser = argparse.ArgumentParser(description='Create a playlist')
