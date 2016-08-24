@@ -51,7 +51,7 @@ def main():
             print(message)
 
     for video_format in video['formats']:
-        print("    {}: {}".format(video_format['name'], video_format['streaming_url']))
+        print("    {}: {}".format(video_format['name'], video_format['url']))
 
 
 if __name__ == '__main__':
