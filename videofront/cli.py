@@ -46,12 +46,8 @@ def upload_video():
     while status is None or status in ['processing', 'pending']:
         sleep(1) # don't flood the server
         video = client.get('videos/' + video_id).json()
-        status_details = video['status_details']
-        if status_details:
-            status = status_details['status']
-            new_message = "    {} {:.2f}%".format(status, status_details['progress'])
-        else:
-            new_message = "    status unknown"
+        status = video['processing']['status']
+        new_message = "    {} {:.2f}%".format(status, video['processing']['progress'])
         if message != new_message:
             message = new_message
             print(message)
