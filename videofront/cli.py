@@ -34,7 +34,10 @@ def upload_video():
     url = upload_url['url']
     video_id = upload_url['id']
     func = getattr(requests, method)
-    _upload_response = func(url, data=open(video_path).read())
+    _upload_response = func(
+        url, data=open(video_path).read(),
+        headers={"Content-Type": 'application/octet-stream'},
+    )
 
     # Monitor transcoding progress
     video = client.get('videos/' + video_id).json()
