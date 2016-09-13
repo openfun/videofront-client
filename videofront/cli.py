@@ -21,22 +21,15 @@ def upload_video():
     args, client = parse_args(parser)
     video_path = args.video
 
-    # Get upload url
-    data = {
-        'filename': os.path.basename(video_path)
-    }
-    if args.playlist:
-        data['playlist_id'] = args.playlist
-    upload_url = client.post('videouploads/', data=data).json()
+    # Create upload url
+    data = {'playlist': args.playlist} if args.playlist else {}
+    upload_url = client.post('videouploadurls/', data=data).json()
 
     # Upload the file
-    method = upload_url['method'].lower()
-    url = upload_url['url']
     video_id = upload_url['id']
-    func = getattr(requests, method)
-    _upload_response = func(
-        url, data=open(video_path).read(),
-        headers={"Content-Type": 'application/octet-stream'},
+    requests.post(
+        client.endpoint("videos/{}/upload/".format(video_id)),
+        files={'file': open(video_path)},
     )
 
     # Monitor transcoding progress
