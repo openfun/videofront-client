@@ -98,6 +98,22 @@ def delete_playlists():
         client.delete('playlists/{}'.format(playlist_id))
         print("Deleted {}".format(playlist_id))
 
+def upload_subtitle():
+    parser = argparse.ArgumentParser(description='Upload a subtitle file')
+    add_auth_arguments(parser)
+    parser.add_argument('video_id', help='Video ID')
+    parser.add_argument('language', help='Language code. E.g: "fr"')
+    parser.add_argument('path', help='Path to subtitle file')
+    args, client = parse_args(parser)
+
+    response = client.post(
+        'videos/{}/subtitles/'.format(args.video_id),
+        data={'language': args.language},
+        files={'file': open(args.path, 'rb')},
+    )
+    subtitle = response.json()
+    print(subtitle)
+
 def add_auth_arguments(parser):
     """
     Add arguments for authenticating with the remote host.

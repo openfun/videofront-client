@@ -32,6 +32,8 @@ setup(
 
             'videofront-uploadvideo=videofront.cli:upload_video',
             'videofront-deletevideos=videofront.cli:delete_videos',
+
+            'videofront-uploadsubtitle=videofront.cli:upload_subtitle',
         ],
     },
     classifiers=[

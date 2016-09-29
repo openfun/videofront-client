@@ -36,8 +36,8 @@ class Client(object):
     def get(self, endpoint, params=None):
         return self._request('get', endpoint, params=params)
 
-    def post(self, endpoint, data=None):
-        return self._request('post', endpoint, data=data)
+    def post(self, endpoint, data=None, files=None):
+        return self._request('post', endpoint, data=data, files=files)
 
     def delete(self, endpoint, data=None):
         return self._request('delete', endpoint, data=data)
